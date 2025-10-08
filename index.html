@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Portal AI — HTML Links</title>
+  <title>Portal Pelatihan</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css">
   <style>
     :root {
@@ -105,7 +105,7 @@
 
     async function loadHTMLFiles() {
       try {
-        const res = await fetch('https://api.github.com/repos/faisalrohman/ai/git/trees/main?recursive=1');
+        const res = await fetch('https://api.github.com/repos/faisalrohman/pelatihan/git/trees/main?recursive=1');
         const data = await res.json();
         const htmlFiles = data.tree
           .filter(f => f.path.endsWith('.html') && f.path.toLowerCase() !== 'index.html');
