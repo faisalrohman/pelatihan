@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flipbook Pelatihan</title>
+  <title>Flipbook Pelatihan - Satu Halaman</title>
 
   <style>
     body {
@@ -19,14 +19,14 @@
 
     .book-container {
       width: 90%;
-      max-width: 900px;
-      aspect-ratio: 3 / 2;
+      max-width: 600px;
+      aspect-ratio: 3 / 4;
       position: relative;
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       border-radius: 10px;
       overflow: hidden;
       background: #fff;
-      touch-action: pan-y; /* penting untuk swipe gesture */
+      touch-action: pan-y; /* untuk swipe */
     }
 
     #flipbook {
@@ -77,7 +77,7 @@
     @media (max-width: 768px) {
       .book-container {
         width: 95%;
-        aspect-ratio: 4 / 3;
+        aspect-ratio: 3 / 5;
       }
 
       button {
@@ -115,16 +115,18 @@
     $(document).ready(function() {
       const flipbook = $('#flipbook');
 
-      // Inisialisasi flipbook
+      // Inisialisasi flipbook mode single page
       flipbook.turn({
+        display: 'single', // tampil satu halaman
         width: $('.book-container').width(),
         height: $('.book-container').height(),
         autoCenter: true,
+        acceleration: true,
         gradients: true,
         elevation: 50
       });
 
-      // Responsif saat di-resize
+      // Responsif saat resize
       $(window).on('resize', function() {
         flipbook.turn('size', $('.book-container').width(), $('.book-container').height());
       });
@@ -147,7 +149,7 @@
         }
       });
 
-      // Swipe gesture
+      // Gesture swipe kiri-kanan untuk mobile
       let touchStartX = 0;
       let touchEndX = 0;
 
