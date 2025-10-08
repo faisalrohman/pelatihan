@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flipbook Pelatihan</title>
 
-  <!-- CSS Style -->
   <style>
     body {
       margin: 0;
@@ -23,10 +22,11 @@
       max-width: 900px;
       aspect-ratio: 3 / 2;
       position: relative;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       border-radius: 10px;
       overflow: hidden;
       background: #fff;
+      touch-action: pan-y; /* penting untuk swipe gesture */
     }
 
     #flipbook {
@@ -42,12 +42,13 @@
       background-position: center;
     }
 
-    /* Tombol navigasi */
+    /* Tombol Navigasi */
     .nav-buttons {
       margin-top: 15px;
       display: flex;
       justify-content: center;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     button {
@@ -73,7 +74,6 @@
       color: #555;
     }
 
-    /* Responsif */
     @media (max-width: 768px) {
       .book-container {
         width: 95%;
@@ -89,7 +89,7 @@
 </head>
 <body>
 
-  <div class="book-container">
+  <div class="book-container" id="bookContainer">
     <div id="flipbook">
       <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a1.png');"></div>
       <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a2.png');"></div>
@@ -102,6 +102,7 @@
   <div class="nav-buttons">
     <button id="prevPage">⬅ Sebelumnya</button>
     <button id="nextPage">Berikutnya ➡</button>
+    <button id="fullscreenBtn">⛶ Fullscreen</button>
   </div>
 
   <footer>📖 Flipbook Pelatihan — Faisal Rohman</footer>
@@ -132,10 +133,42 @@
       $('#nextPage').click(function() {
         flipbook.turn('next');
       });
-
       $('#prevPage').click(function() {
         flipbook.turn('previous');
       });
+
+      // Tombol fullscreen
+      $('#fullscreenBtn').click(function() {
+        const elem = document.getElementById("bookContainer");
+        if (!document.fullscreenElement) {
+          elem.requestFullscreen().catch(err => alert(`Gagal masuk fullscreen: ${err.message}`));
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      // Swipe gesture
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      document.getElementById("bookContainer").addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+      });
+
+      document.getElementById("bookContainer").addEventListener('touchend', function(e) {
+        touchEndX = e.changedTouches[0].screenX;
+        handleGesture();
+      });
+
+      function handleGesture() {
+        const swipeDistance = touchEndX - touchStartX;
+        const threshold = 50; // minimal jarak agar dianggap swipe
+        if (swipeDistance > threshold) {
+          flipbook.turn('previous'); // geser ke kanan -> halaman sebelumnya
+        } else if (swipeDistance < -threshold) {
+          flipbook.turn('next'); // geser ke kiri -> halaman berikutnya
+        }
+      }
     });
   </script>
 
