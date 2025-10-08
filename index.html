@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Portal AI — HTML Links</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.1.0/fonts/remixicon.css">
+  <style>
+    :root {
+      --bg: #eef2ff;
+      --card-bg: #fff;
+      --text: #1e293b;
+    }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 380px;
+      width: 90%;
+      box-shadow: 0 4px 25px rgba(0,0,0,0.1);
+      margin: 40px 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 80vh; /* agar tinggi proporsional di layar */
+    }
+    h2 {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+    #links {
+      flex: 1; /* isi tombol akan memenuhi ruang tengah */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 50px;
+      color: white;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 14px;
+      margin-bottom: 10px;
+      transition: transform 0.15s, opacity 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.04);
+      opacity: 0.9;
+    }
+    .btn i {
+      font-size: 1.2rem;
+    }
+    .purple { background: #8b5cf6; }
+    .teal { background: #0ea5e9; }
+    .green { background: #22c55e; }
+    .amber { background: #f59e0b; }
+    .blue { background: #3b82f6; }
+    .red { background: #ef4444; }
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: auto; /* ini yang membuat footer menempel di bawah */
+      padding-top: 10px;
+    }
+    @media (max-width: 480px) {
+      .container { padding: 16px; min-height: 70vh; }
+      .btn { font-size: 14px; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Silahkan pilih menu dibawah ini:</h2>
+    <div id="links"></div>
+    <footer>© 2025 faisalrohman</footer>
+  </div>
+
+  <script>
+    const linksDiv = document.getElementById('links');
+
+    const colors = ["purple", "teal", "green", "amber", "blue", "red"];
+    const icons = [
+      "ri-cup-line",
+      "ri-car-line",
+      "ri-megaphone-line",
+      "ri-clipboard-line",
+      "ri-earth-line",
+      "ri-window-line"
+    ];
+
+    async function loadHTMLFiles() {
+      try {
+        const res = await fetch('https://api.github.com/repos/faisalrohman/ai/git/trees/main?recursive=1');
+        const data = await res.json();
+        const htmlFiles = data.tree
+          .filter(f => f.path.endsWith('.html') && f.path.toLowerCase() !== 'index.html');
+
+        if (htmlFiles.length === 0) {
+          linksDiv.innerHTML = "<p style='text-align:center;color:#6b7280'>Tidak ada file HTML selain index.html</p>";
+          return;
+        }
+
+        htmlFiles.forEach((f, i) => {
+          const color = colors[i % colors.length];
+          const icon = icons[i % icons.length];
+          const fileName = f.path.split('/').pop().replace('.html', '');
+          const a = document.createElement('a');
+          a.href = `https://faisalrohman.github.io/pelatihan/${f.path}`;
+          a.target = "_blank";
+          a.className = `btn ${color}`;
+          a.innerHTML = `<i class="${icon}"></i> ${fileName}`;
+          linksDiv.appendChild(a);
+        });
+      } catch (err) {
+        console.error(err);
+        linksDiv.innerHTML = "<p style='text-align:center;color:red'>Gagal memuat daftar file.</p>";
+      }
+    }
+
+    loadHTMLFiles();
+  </script>
+</body>
+</html>
