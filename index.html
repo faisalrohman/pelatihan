@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teka-Teki</title>
+    <!-- Memuat Tailwind CSS untuk styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menggunakan font Inter dari Google Fonts untuk tampilan yang lebih modern */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <!-- Kontainer utama untuk teka-teki -->
+    <div class="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center">
+        <!-- Judul teka-teki -->
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">TEKA-TEKI</h1>
+        
+        <!-- Paragraf yang berisi teka-teki -->
+        <p class="text-gray-600 mb-6 text-lg">
+            Aku adalah seekor hewan. Jumlah kakiku ada empat buah. Aku memiliki ekor. Aku juga memiliki belalai.
+            <br>
+            <strong class="mt-2 block">Siapakah aku?</strong>
+        </p>
+        
+        <!-- Area input dan tombol -->
+        <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="jawabanInput" placeholder="Ketik jawabanmu di sini..." class="flex-grow w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+            <button onclick="cekJawaban()" class="bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300">
+                Jawab
+            </button>
+        </div>
+        
+        <!-- Elemen untuk menampilkan feedback -->
+        <div id="feedback" class="mt-6 text-xl font-medium h-8"></div>
+    </div>
+
+    <script>
+        // Fungsi ini akan dipanggil saat tombol "Jawab" diklik
+        function cekJawaban() {
+            // Mengambil elemen input dan feedback dari HTML
+            const inputElement = document.getElementById('jawabanInput');
+            const feedbackElement = document.getElementById('feedback');
+            
+            // Mengambil jawaban pengguna dan mengubahnya menjadi huruf kecil agar tidak case-sensitive
+            const jawabanPengguna = inputElement.value.toLowerCase().trim();
+            
+            // Daftar jawaban yang benar
+            const jawabanBenar = ['gajah'];
+            
+            // Menghapus kelas warna sebelumnya
+            feedbackElement.classList.remove('text-green-600', 'text-red-600');
+            
+            // Memeriksa apakah jawaban pengguna ada dalam daftar jawaban yang benar
+            if (jawabanBenar.includes(jawabanPengguna)) {
+                // Jika benar, tampilkan pesan sukses
+                feedbackElement.textContent = "Jawaban Anda benar, hebat!";
+                feedbackElement.classList.add('text-green-600');
+            } else {
+                // Jika salah, tampilkan pesan error
+                feedbackElement.textContent = "Jawaban Anda salah, silahkan coba lagi.";
+                feedbackElement.classList.add('text-red-600');
+            }
+        }
+
+        // Menambahkan event listener agar bisa menekan "Enter" untuk menjawab
+        document.getElementById('jawabanInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Mencegah perilaku default form submission
+                cekJawaban();
+            }
+        });
+    </script>
+
+</body>
+</html>
