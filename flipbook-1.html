@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Flipbook Pelatihan - Satu Halaman</title>
+  <title>Bangun Ruang-Buku Ajar</title>
 
   <style>
     body {
@@ -15,18 +15,21 @@
       justify-content: center;
       min-height: 100vh;
       font-family: Arial, sans-serif;
+      padding: 15px 0; /* Memberi sedikit ruang atas dan bawah */
     }
 
+    /* --- STYLING UNTUK DESKTOP & TABLET (DEFAULT) --- */
     .book-container {
       width: 90%;
-      max-width: 600px;
-      aspect-ratio: 3 / 4;
+      max-width: 1100px;
+      /* Aspek rasio untuk 2 halaman berdampingan (misal: 2x (3:4) -> 6:4 -> 3:2) */
+      aspect-ratio: 3 / 2; 
       position: relative;
       box-shadow: 0 4px 20px rgba(0,0,0,0.25);
       border-radius: 10px;
       overflow: hidden;
       background: #fff;
-      touch-action: pan-y; /* untuk swipe */
+      touch-action: pan-y; /* untuk swipe vertikal di halaman */
     }
 
     #flipbook {
@@ -38,11 +41,13 @@
       width: 100%;
       height: 100%;
       background-color: white;
-      background-size: cover;
+      /* Menggunakan 'contain' agar seluruh gambar terlihat dan tidak terpotong */
+      background-size: contain;
       background-position: center;
+      background-repeat: no-repeat;
     }
 
-    /* Tombol Navigasi */
+    /* --- STYLING TOMBOL & FOOTER --- */
     .nav-buttons {
       margin-top: 15px;
       display: flex;
@@ -74,9 +79,11 @@
       color: #555;
     }
 
+    /* --- MEDIA QUERY UNTUK MOBILE --- */
     @media (max-width: 768px) {
       .book-container {
         width: 95%;
+        /* Mengembalikan aspek rasio potret untuk 1 halaman */
         aspect-ratio: 3 / 5;
       }
 
@@ -95,10 +102,9 @@
       <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a2.png');"></div>
       <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a3.png');"></div>
       <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a4.png');"></div>
-    </div>
+      </div>
   </div>
 
-  <!-- Tombol Navigasi -->
   <div class="nav-buttons">
     <button id="prevPage">⬅ Sebelumnya</button>
     <button id="nextPage">Berikutnya ➡</button>
@@ -107,28 +113,46 @@
 
   <footer>📖 Flipbook Pelatihan — Faisal Rohman</footer>
 
-  <!-- jQuery + Turn.js -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js/turn.min.js"></script>
 
   <script>
     $(document).ready(function() {
       const flipbook = $('#flipbook');
+      const bookContainer = $('.book-container');
+      const breakpoint = 768; // Batas lebar layar untuk mobile
 
-      // Inisialisasi flipbook mode single page
-      flipbook.turn({
-        display: 'single', // tampil satu halaman
-        width: $('.book-container').width(),
-        height: $('.book-container').height(),
-        autoCenter: true,
-        acceleration: true,
-        gradients: true,
-        elevation: 50
-      });
+      function setupFlipbook() {
+        const width = $(window).width();
+        const isMobile = width < breakpoint;
+        // Tentukan mode tampilan berdasarkan lebar layar
+        const displayMode = isMobile ? 'single' : 'double';
 
-      // Responsif saat resize
+        // Cek apakah flipbook sudah diinisialisasi
+        if (flipbook.turn('is')) {
+          // Jika sudah, hanya update ukuran dan mode tampilan
+          flipbook.turn('display', displayMode);
+          flipbook.turn('size', bookContainer.width(), bookContainer.height());
+        } else {
+          // Jika belum, inisialisasi dengan konfigurasi yang benar
+          flipbook.turn({
+            display: displayMode,
+            width: bookContainer.width(),
+            height: bookContainer.height(),
+            autoCenter: true,
+            acceleration: true,
+            gradients: true,
+            elevation: 50
+          });
+        }
+      }
+
+      // Jalankan fungsi saat halaman pertama kali dimuat
+      setupFlipbook();
+
+      // Jalankan kembali fungsi saat ukuran jendela diubah
       $(window).on('resize', function() {
-        flipbook.turn('size', $('.book-container').width(), $('.book-container').height());
+        setupFlipbook();
       });
 
       // Tombol navigasi
@@ -155,12 +179,12 @@
 
       document.getElementById("bookContainer").addEventListener('touchstart', function(e) {
         touchStartX = e.changedTouches[0].screenX;
-      });
+      }, { passive: true }); // passive:true untuk performa scroll
 
       document.getElementById("bookContainer").addEventListener('touchend', function(e) {
         touchEndX = e.changedTouches[0].screenX;
         handleGesture();
-      });
+      }, { passive: true });
 
       function handleGesture() {
         const swipeDistance = touchEndX - touchStartX;
