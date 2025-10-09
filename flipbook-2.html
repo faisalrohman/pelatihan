@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangun Ruang-Buku Ajar (Versi Stabil)</title>
+
+  <style>
+    /* Reset dasar untuk pengalaman yang konsisten */
+    *, *::before, *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      padding: 20px 10px; /* Memberi ruang agar konten tidak menempel di tepi */
+    }
+
+    /* --- STYLING UNTUK DESKTOP & TABLET (TAMPILAN DEFAULT) --- */
+    .book-container {
+      width: 90%;
+      max-width: 1100px;
+      /* Aspek rasio untuk 2 halaman berdampingan (lebar) */
+      aspect-ratio: 16 / 10;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    #flipbook {
+      width: 100%;
+      height: 100%;
+    }
+
+    #flipbook .page {
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      /* 'contain' memastikan seluruh gambar terlihat dan tidak terpotong */
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    
+    /* Bayangan antar halaman agar terlihat lebih realistis */
+    #flipbook .shadow,
+    #flipbook .gradient {
+        border-radius: 8px;
+    }
+
+    /* --- STYLING TOMBOL & FOOTER --- */
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    button {
+      background-color: #007aff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      -webkit-tap-highlight-color: transparent; /* Hilangkan highlight biru saat disentuh di mobile */
+    }
+
+    button:hover, button:focus {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 122, 255, 0.3);
+      outline: none;
+    }
+    
+    button:active {
+        transform: translateY(0);
+        box-shadow: none;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    /* --- MEDIA QUERY UNTUK TAMPILAN MOBILE --- */
+    @media (max-width: 768px) {
+      .book-container {
+        width: 95%;
+        /* Mengembalikan aspek rasio potret untuk 1 halaman */
+        aspect-ratio: 3 / 4;
+      }
+
+      button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="book-container" id="bookContainer">
+    <div id="flipbook">
+      <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a1.png');"></div>
+      <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a2.png');"></div>
+      <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a3.png');"></div>
+      <div class="page" style="background-image: url('https://faisalrohman.github.io/pelatihan/a4.png');"></div>
+    </div>
+  </div>
+
+  <div class="nav-buttons">
+    <button id="prevPage">⬅ Sebelumnya</button>
+    <button id="nextPage">Berikutnya ➡</button>
+    <button id="fullscreenBtn">⛶ Fullscreen</button>
+  </div>
+
+  <footer>📖 Flipbook Pelatihan — Faisal Rohman</footer>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js/turn.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      const flipbook = $('#flipbook');
+      const bookContainer = $('.book-container');
+      const breakpoint = 768; // Batas lebar layar untuk ganti layout
+
+      // --- FUNGSI UTAMA UNTUK SETUP FLIPBOOK ---
+      function setupFlipbook() {
+        const width = $(window).width();
+        const isMobile = width < breakpoint;
+        const displayMode = isMobile ? 'single' : 'double';
+
+        // Hanya inisialisasi jika belum ada
+        if (!flipbook.turn('is')) {
+          flipbook.turn({
+            display: displayMode,
+            width: bookContainer.width(),
+            height: bookContainer.height(),
+            autoCenter: true,
+            acceleration: true, // Animasi lebih halus
+            gradients: true, // Efek gradien bayangan
+            elevation: 50, // Efek ketinggian saat halaman diangkat
+            when: {
+              // Event ini dipicu setelah halaman berhasil dibalik
+              turned: function(event, page, view) {
+                // (Opsional) Di sini Anda bisa menambahkan logika seperti update nomor halaman
+              }
+            }
+          });
+        } else {
+          // Jika sudah ada, hanya update ukuran dan mode tampilan
+          flipbook.turn('display', displayMode);
+          flipbook.turn('size', bookContainer.width(), bookContainer.height());
+        }
+      }
+
+      // --- EVENT HANDLERS ---
+
+      // 1. Inisialisasi saat halaman dimuat
+      setupFlipbook();
+
+      // 2. Gunakan "Debounce" untuk resize agar tidak memberatkan browser
+      let resizeTimer;
+      $(window).on('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(setupFlipbook, 250); // Tunggu 250ms setelah resize selesai
+      });
+
+      // 3. Tombol navigasi
+      $('#nextPage').on('click', function() {
+        flipbook.turn('next');
+      });
+
+      $('#prevPage').on('click', function() {
+        flipbook.turn('previous');
+      });
+
+      // 4. Tombol fullscreen
+      $('#fullscreenBtn').on('click', function() {
+        const elem = document.getElementById("bookContainer");
+        if (!document.fullscreenElement) {
+          elem.requestFullscreen().catch(err => {
+            alert(`Gagal masuk mode fullscreen: ${err.message} (${err.name})`);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      // 5. Navigasi keyboard (opsional, tapi bagus untuk aksesibilitas)
+      $(document).on('keydown', function(e) {
+          if (e.key === "ArrowLeft") {
+              flipbook.turn('previous');
+          } else if (e.key === "ArrowRight") {
+              flipbook.turn('next');
+          }
+      });
+      
+      // KODE SWIPE MANUAL TELAH DIHAPUS
+      // turn.js sudah menangani swipe/drag secara internal dan lebih baik.
+      // Menambahkan kode manual dapat menyebabkan konflik dan error.
+
+    });
+  </script>
+
+</body>
+</html>
