@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soal Menjodohkan Sistem Pencernaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .drag-item {
+            transition: all 0.3s ease;
+            cursor: grab;
+        }
+        .drag-item:active {
+            cursor: grabbing;
+        }
+        .drag-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .drop-zone {
+            transition: all 0.3s ease;
+            min-height: 50px;
+        }
+        .drop-zone.drag-over {
+            background-color: #e0f2fe;
+            border-color: #0288d1;
+            transform: scale(1.02);
+        }
+        .drop-zone.filled {
+            background-color: #f0f9ff;
+            border-color: #0ea5e9;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .pulse-animation {
+            animation: pulse 0.6s ease-in-out;
+        }
+        .image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-full">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8 fade-in">
+            <h1 class="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                🧬 Soal Menjodohkan Sistem Pencernaan
+            </h1>
+            <p class="text-xl text-white opacity-90 mb-6">
+                Seret nama organ ke kotak di bawah gambar yang sesuai
+            </p>
+        </div>
+
+        <!-- Nama Organ untuk di-drag -->
+        <div class="bg-white rounded-xl shadow-xl p-6 mb-8 fade-in">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                📝 Pilihan Jawaban
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="drag-items-container">
+                <div class="drag-item bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="mulut">
+                    Mulut
+                </div>
+                <div class="drag-item bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="kerongkongan">
+                    Kerongkongan
+                </div>
+                <div class="drag-item bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="lambung">
+                    Lambung
+                </div>
+                <div class="drag-item bg-gradient-to-r from-red-400 to-red-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus 12 jari">
+                    Usus 12 Jari
+                </div>
+                <div class="drag-item bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus halus">
+                    Usus Halus
+                </div>
+                <div class="drag-item bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus besar">
+                    Usus Besar
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Gambar -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" id="images-grid">
+            <!-- Gambar akan di-generate secara random oleh JavaScript -->
+        </div>
+
+        <!-- Tombol Kontrol -->
+        <div class="flex justify-center space-x-4 mb-8 fade-in">
+            <button id="hasil-btn" class="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+                📊 Hasil
+            </button>
+            <button id="reset-btn" class="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+                🔄 Reset
+            </button>
+        </div>
+
+        <!-- Area Feedback -->
+        <div id="feedback" class="text-center mb-8 hidden">
+            <div class="bg-white rounded-xl shadow-xl p-6 max-w-md mx-auto">
+                <p id="feedback-text" class="text-xl font-semibold"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-12">
+        <div class="container mx-auto text-center">
+            <p class="text-lg">
+                Disusun oleh <span class="font-semibold text-blue-300">Faisal Rohman, S.Pd.</span> || 
+                <span class="text-yellow-300">Workshop Transformasi Pembelajaran</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Data gambar dan jawaban yang benar
+        const imageData = [
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar1.jpg', correct: 'mulut', id: 'gambar1' },
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar2.jpg', correct: 'kerongkongan', id: 'gambar2' },
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar3.jpg', correct: 'lambung', id: 'gambar3' },
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar4.jpg', correct: 'usus 12 jari', id: 'gambar4' },
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar5.jpg', correct: 'usus halus', id: 'gambar5' },
+            { url: 'https://juna-arjuna.github.io/media-IPA/gambar6.jpg', correct: 'usus besar', id: 'gambar6' }
+        ];
+
+        let draggedElement = null;
+        let answers = {};
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Generate gambar secara random
+        function generateImages() {
+            const shuffledImages = shuffleArray(imageData);
+            const imagesGrid = document.getElementById('images-grid');
+            imagesGrid.innerHTML = '';
+
+            shuffledImages.forEach((image, index) => {
+                const imageContainer = document.createElement('div');
+                imageContainer.className = 'bg-white rounded-xl shadow-xl p-4 fade-in image-container';
+                imageContainer.style.animationDelay = `${index * 0.1}s`;
+                
+                imageContainer.innerHTML = `
+                    <div class="relative">
+                        <img src="${image.url}" 
+                             alt="${image.id}" 
+                             class="w-full h-48 object-cover rounded-lg mb-4"
+                             onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <div style="display:none;" class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center text-gray-500">
+                            Gambar tidak dapat dimuat
+                        </div>
+                        <div class="drop-zone bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 text-center min-h-16 flex items-center justify-center" 
+                             data-image="${image.id}" 
+                             data-correct="${image.correct}">
+                            <span class="text-gray-400 font-medium">Letakkan jawaban di sini</span>
+                        </div>
+                    </div>
+                `;
+                
+                imagesGrid.appendChild(imageContainer);
+            });
+
+            // Re-initialize drag and drop
+            initializeDragAndDrop();
+        }
+
+        // Initialize drag and drop functionality
+        function initializeDragAndDrop() {
+            const dragItems = document.querySelectorAll('.drag-item');
+            const dropZones = document.querySelectorAll('.drop-zone');
+
+            // Drag items event listeners
+            dragItems.forEach(item => {
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragend', handleDragEnd);
+            });
+
+            // Drop zones event listeners
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', handleDragOver);
+                zone.addEventListener('dragenter', handleDragEnter);
+                zone.addEventListener('dragleave', handleDragLeave);
+                zone.addEventListener('drop', handleDrop);
+            });
+        }
+
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.style.opacity = '0.5';
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDragEnter(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+
+            if (draggedElement) {
+                const draggedText = draggedElement.getAttribute('data-text');
+                const imageId = this.getAttribute('data-image');
+
+                // Cek apakah drop zone sudah terisi
+                const existingAnswer = this.querySelector('.drag-item');
+                if (existingAnswer) {
+                    // Kembalikan jawaban lama ke container
+                    document.getElementById('drag-items-container').appendChild(existingAnswer);
+                    existingAnswer.style.display = 'block';
+                }
+
+                // Pindahkan item ke drop zone
+                this.innerHTML = '';
+                this.appendChild(draggedElement.cloneNode(true));
+                this.classList.add('filled');
+                
+                // Sembunyikan item asli
+                draggedElement.style.display = 'none';
+                
+                // Simpan jawaban
+                answers[imageId] = draggedText;
+
+                // Tambahkan animasi
+                this.classList.add('pulse-animation');
+                setTimeout(() => {
+                    this.classList.remove('pulse-animation');
+                }, 600);
+            }
+        }
+
+        // Cek hasil jawaban
+        function checkAnswers() {
+            const correctAnswers = {
+                'gambar1': 'mulut',
+                'gambar2': 'kerongkongan', 
+                'gambar3': 'lambung',
+                'gambar4': 'usus 12 jari',
+                'gambar5': 'usus halus',
+                'gambar6': 'usus besar'
+            };
+
+            let allCorrect = true;
+            let answeredCount = 0;
+
+            for (let imageId in correctAnswers) {
+                if (answers[imageId]) {
+                    answeredCount++;
+                    if (answers[imageId] !== correctAnswers[imageId]) {
+                        allCorrect = false;
+                    }
+                } else {
+                    allCorrect = false;
+                }
+            }
+
+            const feedbackEl = document.getElementById('feedback');
+            const feedbackText = document.getElementById('feedback-text');
+            
+            if (answeredCount === 0) {
+                feedbackText.textContent = 'Silakan jawab semua soal terlebih dahulu!';
+                feedbackText.className = 'text-xl font-semibold text-orange-600';
+            } else if (answeredCount < 6) {
+                feedbackText.textContent = `Anda baru menjawab ${answeredCount} dari 6 soal. Lengkapi jawaban Anda!`;
+                feedbackText.className = 'text-xl font-semibold text-orange-600';
+            } else if (allCorrect) {
+                feedbackText.textContent = '🎉 Hebat. Jawaban anda benar!';
+                feedbackText.className = 'text-xl font-semibold text-green-600';
+            } else {
+                feedbackText.textContent = '❌ Maaf. Jawaban anda salah. Ulangi lagi!';
+                feedbackText.className = 'text-xl font-semibold text-red-600';
+            }
+
+            feedbackEl.classList.remove('hidden');
+            feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Reset permainan
+        function resetGame() {
+            answers = {};
+            
+            // Kembalikan semua drag items ke container asli
+            const dragItems = document.querySelectorAll('.drop-zone .drag-item');
+            dragItems.forEach(item => {
+                document.getElementById('drag-items-container').appendChild(item);
+                item.style.display = 'block';
+            });
+
+            // Reset drop zones
+            const dropZones = document.querySelectorAll('.drop-zone');
+            dropZones.forEach(zone => {
+                zone.innerHTML = '<span class="text-gray-400 font-medium">Letakkan jawaban di sini</span>';
+                zone.classList.remove('filled');
+            });
+
+            // Sembunyikan feedback
+            document.getElementById('feedback').classList.add('hidden');
+
+            // Generate ulang gambar dengan urutan random
+            generateImages();
+        }
+
+        // Event listeners untuk tombol
+        document.getElementById('hasil-btn').addEventListener('click', checkAnswers);
+        document.getElementById('reset-btn').addEventListener('click', resetGame);
+
+        // Initialize game
+        generateImages();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98bae04d049624d2',t:'MTc1OTk4MTQzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
