@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Persamaan Kuadrat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- MathJax untuk merender notasi LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .formula-box {
+            font-size: 1.5em; /* Ukuran font lebih besar untuk rumus */
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 sm:p-10 rounded-2xl shadow-lg">
+        <header class="text-center border-b-2 border-gray-200 pb-6 mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-blue-600">🚀 Petualangan Persamaan Kuadrat 🚀</h1>
+            <p class="text-lg text-gray-600 mt-2">Membongkar misteri di balik \(ax^2 + bx + c = 0\) dengan cara yang seru!</p>
+        </header>
+
+        <main>
+            <!-- Apa itu Persamaan Kuadrat? -->
+            <section class="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                <h2 class="text-2xl font-bold text-blue-700 border-l-4 border-blue-700 pl-4 mb-4">Apa itu Persamaan Kuadrat?</h2>
+                <p class="mb-4">Bayangkan kamu melempar bola basket. Lintasan bola itu membentuk sebuah kurva cantik yang disebut <strong>parabola</strong>. Nah, persamaan kuadrat adalah "resep matematika" untuk menggambarkan kurva seperti itu!</p>
+                <p class="mb-4">Secara formal, persamaan kuadrat adalah persamaan polinomial orde dua. Bentuk umumnya adalah:</p>
+                <div class="formula-box bg-gray-200 p-5 rounded-lg text-center font-semibold my-4">
+                    \(ax^2 + bx + c = 0\)
+                </div>
+                <p>Dengan syarat:</p>
+                <ul class="list-disc list-inside bg-white p-4 rounded-md mt-2">
+                    <li>\(x\) adalah variabel yang tidak kita ketahui (yang ingin kita cari nilainya).</li>
+                    <li>\(a\), \(b\), dan \(c\) adalah konstanta (angka yang kita ketahui).</li>
+                    <li>\(a\) tidak boleh nol (\(a \neq 0\)), karena jika nol, ini bukan lagi persamaan kuadrat!</li>
+                </ul>
+                <p class="mt-4">Tujuan kita adalah menemukan nilai \(x\) yang membuat persamaan ini benar. Nilai \(x\) ini disebut <strong>"akar-akar"</strong> persamaan.</p>
+            </section>
+
+            <!-- Tiga Senjata Ampuh -->
+            <section class="mb-8 p-6 bg-green-50 rounded-lg border border-green-200">
+                <h2 class="text-2xl font-bold text-green-700 border-l-4 border-green-700 pl-4 mb-6">Tiga Senjata Ampuh Menyelesaikan Persamaan Kuadrat</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-xl font-semibold text-green-800 mb-2">1. Pemfaktoran</h3>
+                        <p>Metode ini seperti memecah teka-teki. Kita mencari dua bilangan yang jika dijumlahkan hasilnya \(b\) dan jika dikalikan hasilnya \(a \times c\).</p>
+                        <p class="mt-2 text-sm bg-gray-100 p-2 rounded"><strong>Contoh:</strong> \(x^2 + 5x + 6 = 0 \implies (x+2)(x+3)=0\). Akarnya: \(x = -2\) atau \(x = -3\).</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-xl font-semibold text-green-800 mb-2">2. Melengkapkan Kuadrat Sempurna</h3>
+                        <p>Metode ini mengubah sisi kiri persamaan menjadi bentuk kuadrat sempurna \((x+p)^2\).</p>
+                        <p class="mt-2 text-sm bg-gray-100 p-2 rounded"><strong>Contoh:</strong> \(x^2 + 6x - 7 = 0 \implies (x+3)^2 = 16\). Akarnya: \(x=1\) atau \(x=-7\).</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-lg shadow-md hover:shadow-xl hover:-translate-y-1 transition-transform duration-300">
+                        <h3 class="text-xl font-semibold text-green-800 mb-2">3. Rumus ABC (Rumus Kuadratik)</h3>
+                        <p>Ini adalah senjata pamungkas! Rumus ini bisa menyelesaikan SEMUA jenis persamaan kuadrat.</p>
+                        <div class="formula-box bg-gray-100 p-3 rounded-lg text-center font-semibold my-2 text-base">
+                            \(x = \frac{-b \pm \sqrt{b^2-4ac}}{2a}\)
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Kalkulator Interaktif -->
+            <section id="calculator" class="mb-8 p-6 bg-purple-50 rounded-lg border border-purple-200">
+                <h2 class="text-2xl font-bold text-purple-700 border-l-4 border-purple-700 pl-4 mb-4">Kalkulator Persamaan Kuadrat Interaktif</h2>
+                <p class="mb-6">Masukkan nilai \(a\), \(b\), dan \(c\) dari persamaanmu untuk menemukan akarnya secara instan!</p>
+                <div class="flex flex-wrap items-center justify-center gap-4 mb-6 text-xl">
+                    <input type="number" id="a" placeholder="a" class="w-20 p-2 text-center border-2 border-gray-300 rounded-md focus:border-purple-500 focus:ring-purple-500 transition"> \(x^2 +\)
+                    <input type="number" id="b" placeholder="b" class="w-20 p-2 text-center border-2 border-gray-300 rounded-md focus:border-purple-500 focus:ring-purple-500 transition"> \(x +\)
+                    <input type="number" id="c" placeholder="c" class="w-20 p-2 text-center border-2 border-gray-300 rounded-md focus:border-purple-500 focus:ring-purple-500 transition"> \(= 0\)
+                </div>
+                <button id="calculateBtn" class="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-purple-700 transition-colors duration-300 text-lg">Hitung Akar!</button>
+                <div id="result" class="mt-6 p-4 bg-gray-100 rounded-lg text-center min-h-[50px]">
+                    <p class="text-gray-500">Hasilnya akan muncul di sini...</p>
+                </div>
+            </section>
+
+            <!-- Latihan Soal -->
+            <section class="p-6 bg-yellow-50 rounded-lg border border-yellow-200">
+                <h2 class="text-2xl font-bold text-yellow-700 border-l-4 border-yellow-700 pl-4 mb-4">Latihan Soal: Uji Kemampuanmu!</h2>
+                <div class="space-y-3">
+                    <details class="bg-white p-1 rounded-lg shadow-sm border">
+                        <summary class="font-semibold text-yellow-800 p-3 cursor-pointer">Soal 1: \(x^2 - 7x + 10 = 0\)</summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p><strong>Metode:</strong> Pemfaktoran. Cari dua bilangan: jumlah = -7, kali = 10. Bilangan itu adalah -2 dan -5.</p>
+                            <p>\((x-2)(x-5) = 0\)</p>
+                            <p class="font-bold mt-2">Jawaban: \(x=2\) atau \(x=5\).</p>
+                        </div>
+                    </details>
+                    <details class="bg-white p-1 rounded-lg shadow-sm border">
+                        <summary class="font-semibold text-yellow-800 p-3 cursor-pointer">Soal 2: \(2x^2 + 5x - 3 = 0\)</summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p><strong>Metode:</strong> Rumus ABC. \(a=2, b=5, c=-3\)</p>
+                            <p>\(x = \frac{-5 \pm \sqrt{5^2 - 4(2)(-3)}}{2(2)} = \frac{-5 \pm \sqrt{49}}{4}\)</p>
+                            <p class="font-bold mt-2">Jawaban: \(x = 0.5\) atau \(x = -3\).</p>
+                        </div>
+                    </details>
+                    <details class="bg-white p-1 rounded-lg shadow-sm border">
+                        <summary class="font-semibold text-yellow-800 p-3 cursor-pointer">Soal 3: \(x^2 + 2x + 5 = 0\)</summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p><strong>Metode:</strong> Rumus ABC. Diskriminan \(D = b^2 - 4ac = 2^2 - 4(1)(5) = -16\).</p>
+                            <p>Karena diskriminan negatif (\(D < 0\)), persamaan ini tidak memiliki akar riil.</p>
+                            <p class="font-bold mt-2">Jawaban: Tidak ada solusi di himpunan bilangan riil.</p>
+                        </div>
+                    </details>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-10 pt-6 border-t border-gray-200">
+            <p class="text-gray-500 text-sm">&copy; 2025 - Materi Edukasi Digital. Dibuat dengan semangat belajar!</p>
+        </footer>
+    </div>
+
+    <script>
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultDiv = document.getElementById('result');
+
+        calculateBtn.addEventListener('click', function() {
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+
+            // Validasi Input
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                resultDiv.innerHTML = `<p>Harap isi semua nilai a, b, dan c.</p>`;
+                resultDiv.className = 'mt-6 p-4 rounded-lg text-center min-h-[50px] bg-red-100 text-red-700 border border-red-200';
+                return;
+            }
+
+            if (a === 0) {
+                resultDiv.innerHTML = `<p>Nilai 'a' tidak boleh nol. Ini adalah persamaan linear, bukan kuadrat.</p>`;
+                resultDiv.className = 'mt-6 p-4 rounded-lg text-center min-h-[50px] bg-red-100 text-red-700 border border-red-200';
+                return;
+            }
+
+            const discriminant = b * b - 4 * a * c;
+            let solution = '';
+            
+            // Logika Perhitungan
+            if (discriminant > 0) {
+                const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                solution = `
+                    <p class="font-semibold">Diskriminan (D) = ${discriminant.toFixed(2)} > 0</p>
+                    <p>Persamaan ini memiliki <strong>dua akar riil yang berbeda</strong>:</p>
+                    <p class="text-lg font-bold mt-2">\\(x_1 = ${x1.toFixed(3)}\\)</p>
+                    <p class="text-lg font-bold">\\(x_2 = ${x2.toFixed(3)}\\)</p>
+                `;
+                resultDiv.className = 'mt-6 p-4 rounded-lg text-center min-h-[50px] bg-green-100 text-green-800 border border-green-200';
+            } else if (discriminant === 0) {
+                const x = -b / (2 * a);
+                solution = `
+                    <p class="font-semibold">Diskriminan (D) = 0</p>
+                    <p>Persamaan ini memiliki <strong>satu akar riil kembar</strong>:</p>
+                    <p class="text-lg font-bold mt-2">\\(x = ${x.toFixed(3)}\\)</p>
+                `;
+                resultDiv.className = 'mt-6 p-4 rounded-lg text-center min-h-[50px] bg-yellow-100 text-yellow-800 border border-yellow-200';
+            } else { // discriminant < 0
+                const realPart = (-b / (2 * a)).toFixed(3);
+                const imagPart = (Math.sqrt(-discriminant) / (2 * a)).toFixed(3);
+                solution = `
+                    <p class="font-semibold">Diskriminan (D) = ${discriminant.toFixed(2)} < 0</p>
+                    <p>Persamaan ini <strong>tidak memiliki akar riil</strong> (akarnya imajiner/kompleks):</p>
+                    <p class="text-lg font-bold mt-2">\\(x_1 = ${realPart} + ${imagPart}i\\)</p>
+                    <p class="text-lg font-bold">\\(x_2 = ${realPart} - ${imagPart}i\\)</p>
+                `;
+                resultDiv.className = 'mt-6 p-4 rounded-lg text-center min-h-[50px] bg-blue-100 text-blue-800 border border-blue-200';
+            }
+
+            resultDiv.innerHTML = solution;
+            // Memberitahu MathJax untuk merender ulang notasi matematika di dalam hasil
+            if (window.MathJax) {
+                 MathJax.typesetPromise([resultDiv]);
+            }
+        });
+    </script>
+</body>
+</html>
