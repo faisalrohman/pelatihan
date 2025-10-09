@@ -61,74 +61,97 @@
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        
+        /* Touch device improvements */
+        @media (max-width: 768px) {
+            .drag-item {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .drop-zone {
+                min-height: 50px;
+                touch-action: manipulation;
+            }
+        }
+        
+        /* Prevent text selection on drag items */
+        .drag-item {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
     </style>
 </head>
 <body class="gradient-bg min-h-full">
     <div class="container mx-auto px-4 py-8">
         <!-- Header -->
-        <div class="text-center mb-8 fade-in">
-            <h1 class="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+        <div class="text-center mb-6 sm:mb-8 fade-in px-2">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 drop-shadow-lg">
                 🧬 Soal Menjodohkan Sistem Pencernaan
             </h1>
-            <p class="text-xl text-white opacity-90 mb-6">
+            <p class="text-sm sm:text-lg lg:text-xl text-white opacity-90 mb-4 sm:mb-6">
                 Seret nama organ ke kotak di bawah gambar yang sesuai
             </p>
         </div>
 
-        <!-- Nama Organ untuk di-drag -->
-        <div class="bg-white rounded-xl shadow-xl p-6 mb-8 fade-in">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4 text-center">
+        <!-- Nama Organ untuk di-drag (Sticky) -->
+        <div class="sticky top-0 z-50 bg-white rounded-xl shadow-xl p-4 sm:p-6 mb-8 fade-in border-b-4 border-blue-500">
+            <h2 class="text-lg sm:text-2xl font-semibold text-gray-800 mb-3 sm:mb-4 text-center">
                 📝 Pilihan Jawaban
             </h2>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3" id="drag-items-container">
-                <div class="drag-item bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="mulut">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3" id="drag-items-container">
+                <div class="drag-item bg-gradient-to-r from-blue-400 to-blue-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="mulut">
                     Mulut
                 </div>
-                <div class="drag-item bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="kerongkongan">
+                <div class="drag-item bg-gradient-to-r from-green-400 to-green-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="kerongkongan">
                     Kerongkongan
                 </div>
-                <div class="drag-item bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="lambung">
+                <div class="drag-item bg-gradient-to-r from-purple-400 to-purple-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="lambung">
                     Lambung
                 </div>
-                <div class="drag-item bg-gradient-to-r from-red-400 to-red-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus 12 jari">
+                <div class="drag-item bg-gradient-to-r from-red-400 to-red-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="usus 12 jari">
                     Usus 12 Jari
                 </div>
-                <div class="drag-item bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus halus">
+                <div class="drag-item bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="usus halus">
                     Usus Halus
                 </div>
-                <div class="drag-item bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-lg p-3 text-center font-semibold shadow-lg" draggable="true" data-text="usus besar">
+                <div class="drag-item bg-gradient-to-r from-indigo-400 to-indigo-600 text-white rounded-lg p-2 sm:p-3 text-center font-semibold shadow-lg text-xs sm:text-sm" draggable="true" data-text="usus besar">
                     Usus Besar
                 </div>
             </div>
         </div>
 
         <!-- Grid Gambar -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" id="images-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 px-2" id="images-grid">
             <!-- Gambar akan di-generate secara random oleh JavaScript -->
         </div>
 
         <!-- Tombol Kontrol -->
-        <div class="flex justify-center space-x-4 mb-8 fade-in">
-            <button id="hasil-btn" class="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+        <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-6 sm:mb-8 fade-in px-4">
+            <button id="hasil-btn" class="bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white font-bold py-3 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-sm sm:text-base">
                 📊 Hasil
             </button>
-            <button id="reset-btn" class="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+            <button id="reset-btn" class="bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold py-3 px-6 sm:px-8 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 text-sm sm:text-base">
                 🔄 Reset
             </button>
         </div>
 
         <!-- Area Feedback -->
-        <div id="feedback" class="text-center mb-8 hidden">
-            <div class="bg-white rounded-xl shadow-xl p-6 max-w-md mx-auto">
-                <p id="feedback-text" class="text-xl font-semibold"></p>
+        <div id="feedback" class="text-center mb-6 sm:mb-8 hidden px-4">
+            <div class="bg-white rounded-xl shadow-xl p-4 sm:p-6 max-w-md mx-auto">
+                <p id="feedback-text" class="text-base sm:text-xl font-semibold"></p>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-6 mt-12">
-        <div class="container mx-auto text-center">
-            <p class="text-lg">
+    <footer class="bg-gray-800 text-white py-4 sm:py-6 mt-8 sm:mt-12">
+        <div class="container mx-auto text-center px-4">
+            <p class="text-sm sm:text-lg">
                 Disusun oleh <span class="font-semibold text-blue-300">Faisal Rohman, S.Pd.</span> || 
                 <span class="text-yellow-300">Workshop Transformasi Pembelajaran</span>
             </p>
@@ -174,15 +197,15 @@
                     <div class="relative">
                         <img src="${image.url}" 
                              alt="${image.id}" 
-                             class="w-full h-48 object-cover rounded-lg mb-4"
+                             class="w-full h-32 sm:h-40 lg:h-48 object-cover rounded-lg mb-3 sm:mb-4"
                              onerror="this.src=''; this.alt='Gambar gagal dimuat'; this.style.display='none'; this.nextElementSibling.style.display='block';">
-                        <div style="display:none;" class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center text-gray-500">
+                        <div style="display:none;" class="w-full h-32 sm:h-40 lg:h-48 bg-gray-200 rounded-lg mb-3 sm:mb-4 flex items-center justify-center text-gray-500 text-xs sm:text-sm">
                             Gambar tidak dapat dimuat
                         </div>
-                        <div class="drop-zone bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 text-center min-h-16 flex items-center justify-center" 
+                        <div class="drop-zone bg-white border-2 border-dashed border-gray-300 rounded-lg p-3 sm:p-4 text-center min-h-12 sm:min-h-16 flex items-center justify-center" 
                              data-image="${image.id}" 
                              data-correct="${image.correct}">
-                            <span class="text-gray-400 font-medium">Letakkan jawaban di sini</span>
+                            <span class="text-gray-400 font-medium text-xs sm:text-sm">Letakkan jawaban di sini</span>
                         </div>
                     </div>
                 `;
@@ -331,7 +354,7 @@
             // Reset drop zones
             const dropZones = document.querySelectorAll('.drop-zone');
             dropZones.forEach(zone => {
-                zone.innerHTML = '<span class="text-gray-400 font-medium">Letakkan jawaban di sini</span>';
+                zone.innerHTML = '<span class="text-gray-400 font-medium text-xs sm:text-sm">Letakkan jawaban di sini</span>';
                 zone.classList.remove('filled');
             });
 
@@ -349,5 +372,5 @@
         // Initialize game
         generateImages();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98bae04d049624d2',t:'MTc1OTk4MTQzMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98bae88da14224d2',t:'MTc1OTk4MTc3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
